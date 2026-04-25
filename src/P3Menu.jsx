@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // Importing the assets from the src/assets folder
-import videoN from "./assets/mainn.mp4";
+import videoN from "./assets/Mainn.mp4";
 import video1 from "./assets/main1.mp4";
 import video2 from "./assets/main2.mp4";
 import video3 from "./assets/main3.mp4";
