@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import P3Menu from './P3Menu.jsx'
-import App from './App.jsx' // Let App.jsx handle the layout
+import { BrowserRouter } from 'react-router-dom' // Add this!
+import App from './App.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
 )
