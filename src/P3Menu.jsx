@@ -1,15 +1,26 @@
 import { useState, useEffect } from "react";
 
+// Importing the assets from the src/assets folder
+import videoN from "./assets/mainn.mp4";
+import video1 from "./assets/main1.mp4";
+import video2 from "./assets/main2.mp4";
+import video3 from "./assets/main3.mp4";
+
 const ITEMS = [
   { id: "about",  label: "ABOUT ME",    href: "#about",  fontSize: 130, offsetX: 0,  offsetY: 0  },
   { id: "resume", label: "RESUME",      href: "#resume", fontSize: 108, offsetX: 38, offsetY: -8 },
   { id: "github", label: "GITHUB LINK", href: "https://github.com/yourname", fontSize: 88, offsetX: 14, offsetY: -6 },
+  { id: "contact", label: "CONTACT",    href: "#contact", fontSize: 75, offsetX: 20, offsetY: -4 },
 ];
+
+// Map the videos to the menu items
+const VIDEO_SOURCES = [videoN, video1, video2, video3];
 
 const CLIP_SHAPES = [
   (w, h) => `polygon(0px ${h*0.06}px, ${w - h*0.55}px 0px, ${w}px ${h*0.42}px, ${w - h*0.18}px ${h}px, 0px ${h*0.94}px)`,
   (w, h) => `polygon(${h*0.12}px 0px, ${w - h*0.3}px ${h*0.04}px, ${w}px ${h*0.5}px, ${w - h*0.08}px ${h}px, 0px ${h*0.88}px)`,
   (w, h) => `polygon(0px ${h*0.1}px, ${w - h*0.4}px 0px, ${w}px ${h*0.45}px, ${w - h*0.25}px ${h}px, ${h*0.05}px ${h*0.9}px)`,
+  (w, h) => `polygon(0px 0px, ${w}px 10%, ${w}px 90%, 0px 100%)`, // Shape for the 4th item
 ];
 
 export default function P3Menu() {
@@ -50,9 +61,10 @@ export default function P3Menu() {
           inset: 0;
           width: 100%; height: 100%;
           object-fit: cover;
-          opacity: 0.4;
+          opacity: 0.6; /* Slightly higher opacity for a better cinematic feel */
           z-index: 0;
           pointer-events: none;
+          transition: opacity 0.5s ease;
         }
         .p3-circle {
           position: absolute;
@@ -170,7 +182,17 @@ export default function P3Menu() {
       `}</style>
 
       <div className="p3-root">
-        <video className="p3-video" src="/bg.mp4" autoPlay loop muted playsInline />
+        {/* Swaps the video file when the 'active' state changes */}
+        <video 
+          key={VIDEO_SOURCES[active]} 
+          className="p3-video" 
+          src={VIDEO_SOURCES[active]} 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+        />
+        
         <div className="p3-circle" />
         <div className="p3-bg-word">SYSTEM</div>
         <div className="p3-scanlines" />
