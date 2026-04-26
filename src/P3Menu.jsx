@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 // Our list of items. Note the 'skew' and 'skewY' values which create the diagonal look!
 const ITEMS = [
   { id: "about",   label: "ABOUT ME",      page: "about",    fontSize: 80, offsetX: 0,  offsetY: 0,  skew: -6,  skewY: 10  },
-  { id: "resume",  label: "RESUME",        page: "resume",   fontSize: 66, offsetX: 20, offsetY: 8,  skew: -11, skewY: -10 },
-  { id: "github",  label: "GITHUB LINK",   page: "socials",  fontSize: 68, offsetX: 8,  offsetY: 6,  skew: 0,   skewY: -4  },
+  { id: "resume",  label: "CV",        page: "resume",   fontSize: 66, offsetX: 20, offsetY: 8,  skew: -11, skewY: -10 },
+  { id: "github",  label: "LINKEDIN",   url: "https://www.linkedin.com/in/taimur-khan-871915214/",  fontSize: 68, offsetX: 8,  offsetY: 6,  skew: 0,   skewY: -4  },
   { id: "socials", label: "SOCIALS",       page: "socials",  fontSize: 74, offsetX: 16, offsetY: 8,  skew: -3,  skewY: 5   },
 ];
 
@@ -35,7 +35,15 @@ export default function P3Menu({ onNavigate }) {
     const onKey = (e) => {
       if (e.key === "ArrowUp")   activate(Math.max(0, active - 1));
       if (e.key === "ArrowDown") activate(Math.min(ITEMS.length - 1, active + 1));
-      if (e.key === "Enter")     onNavigate?.(ITEMS[active].page);
+      if (e.key === "Enter") {
+        const currentItem = ITEMS[active];
+        // Check if it's an external link
+        if (currentItem.url) {
+          window.open(currentItem.url, "_blank"); // Opens in a new tab
+        } else {
+          onNavigate?.(currentItem.page); // Transitions internally
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -217,7 +225,7 @@ export default function P3Menu({ onNavigate }) {
 
       <div className="p3-overlay">
         <div className="p3-name-tag">
-          <span>jade's</span>
+          <span>Taimur's</span>
           <span>persona</span>
         </div>
         <div className="p3-stripe" />
