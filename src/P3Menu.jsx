@@ -46,7 +46,7 @@ export default function P3Menu({ onNavigate }) {
       `}</style>
 
       {/* Optional: Add the name tag mentioned in your CSS */}
-      <div className="p3-name-tag" style={{ position: 'absolute', top: '40px', left: '40px', color: 'white', fontFamily: 'Bebas Neue', fontSize: '80px', z-index: 30 }}>
+      <div className="p3-name-tag" style={{ position: 'absolute', top: '40px', left: '40px', color: 'white', fontFamily: 'Bebas Neue', fontSize: '80px', zIndex: 30 }}>
         PERSONA
       </div>
 
