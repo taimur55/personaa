@@ -11,14 +11,13 @@ import icon3 from "./assets/icon3.png";
 
 const CHARS = [char1, char2, char3];
 
-// Changed roles to match the timeline vibe
 const ROLES = [
   { text: "CURRENT", color: "#e8c100", bg: "rgba(232,193,0,0.12)", border: "rgba(232,193,0,0.5)" },
   { text: "PAST",    color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
   { text: "EXTRA",   color: "#ff4a8f", bg: "rgba(255,74,143,0.12)", border: "rgba(255,74,143,0.5)" },
 ];
 
-// Completely revamped ITEMS array for achievements
+// Added the "descriptions" arrays so the expanding box has text!
 const ITEMS = [
   {
     id: "university", label: "UNIVERSITY", icon: "🎓", barIcon: icon1, bars: 4, newBars: [0], 
@@ -48,6 +47,11 @@ const ITEMS = [
       "Head Boy / Student Prefect", 
       "Gold in National Math Challenge"
     ],
+    descriptions: [
+      "Achieved top grades in Mathematics, Physics, and Further Mathematics.",
+      "Elected by peers and teachers to represent the student body and lead assemblies.",
+      "Scored in the top 1% nationally in the UKMT Senior Mathematical Challenge."
+    ],
     stats: [
       { tag: "ALVL", value: "03", color: "#e1306c" },
       { tag: "GCSE", value: "13", color: "#f77737" },
@@ -62,6 +66,12 @@ const ITEMS = [
       "Duke of Edinburgh Gold Award", 
       "Grade 8 Piano Examination"
     ],
+    descriptions: [
+      "Certified in foundational cloud concepts, security, and AWS infrastructure.",
+      "Passed the Certified SolidWorks Associate exam for 3D mechanical design.",
+      "Completed a 4-day wilderness expedition and 12 months of community volunteering.",
+      "Achieved distinction in the ABRSM Grade 8 practical piano assessment."
+    ],
     stats: [
       { tag: "CERT", value: "02", color: "#00f2ea" },
       { tag: "XTRA", value: "04", color: "#ff0050" },
@@ -73,8 +83,8 @@ export default function Achievements() {
   const [active, setActive]               = useState(0);
   const [mounted, setMounted]             = useState(false);
   const [activeInfoBar, setActiveInfoBar] = useState(0);
-  const [focus, setFocus]                 = useState("left"); // "left" | "right"
-  const [inspected, setInspected]         = useState(false);
+  const [focus, setFocus]                 = useState("left"); 
+  const [isExpanded, setIsExpanded]       = useState(false); // Tracks if the accordion is open
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,28 +92,47 @@ export default function Achievements() {
     return () => clearTimeout(t);
   }, []);
 
+  // Reset the expansion state if you switch the main left category
+  useEffect(() => {
+    setIsExpanded(false);
+    setActiveInfoBar(0);
+  }, [active]);
+
   useEffect(() => {
     const onKey = (e) => {
+      // 1. If Accordion is open, Left Arrow or Esc closes the accordion ONLY.
+      if (focus === "right" && isExpanded && (e.key === "ArrowLeft" || e.key === "Escape" || e.key === "Backspace")) {
+        setIsExpanded(false);
+        return; // Stops execution so it doesn't navigate away
+      }
+
+      // 2. Main Navigation Logic
       if (focus === "left") {
         if (e.key === "ArrowUp")    setActive(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown")  setActive(i => Math.min(ITEMS.length - 1, i + 1));
         if (e.key === "ArrowRight") { setFocus("right"); setActiveInfoBar(0); }
-      } else {
+        // Left/Esc backs out of the page completely
+        if (e.key === "Escape" || e.key === "Backspace" || e.key === "ArrowLeft") navigate(-1);
+      
+      } else if (focus === "right") {
         const barCount = ITEMS[active].bars;
+        // Navigating up and down works whether expanded or closed!
         if (e.key === "ArrowUp")    setActiveInfoBar(i => Math.max(0, i - 1));
-        if (e.key === "ArrowDown") setActiveInfoBar(i => Math.min(barCount - 1, i + 1));
-        if (e.key === "ArrowLeft") setFocus("left");
-        if (e.key === "Enter") setInspected(true);
+        if (e.key === "ArrowDown")  setActiveInfoBar(i => Math.min(barCount - 1, i + 1));
+        
+        if (!isExpanded) {
+          if (e.key === "ArrowLeft") setFocus("left");
+          if (e.key === "Enter") setIsExpanded(true); // Open the accordion
+          if (e.key === "Escape" || e.key === "Backspace") navigate(-1);
+        } else {
+          // If already expanded, hitting Enter again closes it
+          if (e.key === "Enter") setIsExpanded(false);
+        }
       }
-      if (e.key === "Escape" || e.key === "Backspace") {
-        if (inspected) setInspected(false);
-        else navigate(-1);
-      }
-      if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [active, navigate, focus]);
+  }, [active, focus, isExpanded, navigate]);
 
   return (
     <div id="menu-screen">
@@ -152,9 +181,6 @@ export default function Achievements() {
         .sc-bar-outer.active .sc-bar     { height: 90px; }
         .sc-bar-outer.active .sc-bar-red { height: 90px; }
         .sc-bar-outer.mounted { transform: translateX(0); }
-        .sc-bar-outer:nth-child(1) { transition-delay: 0ms; }
-        .sc-bar-outer:nth-child(2) { transition-delay: 80ms; }
-        .sc-bar-outer:nth-child(3) { transition-delay: 160ms; }
 
         .sc-bar-red {
           position: absolute;
@@ -167,7 +193,6 @@ export default function Achievements() {
           opacity: 0;
           transition: opacity 0.2s ease;
           z-index: 0;
-          pointer-events: none;
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
@@ -191,21 +216,10 @@ export default function Achievements() {
           width: 6%;
           background: linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
           z-index: 1;
-          pointer-events: none;
           opacity: 0;
           transition: opacity 0.35s ease;
         }
         .sc-bar-outer.active .sc-bar-shade { opacity: 1; }
-
-        .sc-bar::after {
-          content: '';
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 6px;
-          background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
-          z-index: 10;
-          pointer-events: none;
-        }
 
         .sc-bar-content {
           position: relative;
@@ -253,7 +267,6 @@ export default function Achievements() {
           flex-shrink: 0;
           color: rgba(255,255,255,0.15);
           transition: color 0.2s ease;
-          user-select: none;
         }
         .sc-bar-outer.active .sc-icon { color: rgba(255,255,255,0.25); }
 
@@ -264,35 +277,8 @@ export default function Achievements() {
           line-height: 1;
           color: rgba(255,255,255,0.85);
           transition: color 0.2s ease;
-          user-select: none;
         }
         .sc-bar-outer.active .sc-label { color: #111111; }
-
-        @keyframes sc-arrow-left {
-          0%, 100% { transform: translateX(0); opacity: 1; }
-          50%      { transform: translateX(-5px); opacity: 0.4; }
-        }
-        @keyframes sc-arrow-right {
-          0%, 100% { transform: translateX(0); opacity: 1; }
-          50%      { transform: translateX(5px); opacity: 0.4; }
-        }
-        .sc-nav-btn {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 12px;
-          letter-spacing: 2px;
-          color: #111;
-          border: 1px solid rgba(0,0,0,0.35);
-          padding: 1px 7px;
-          line-height: 1.5;
-          user-select: none;
-        }
-        .sc-nav-arrow {
-          font-size: 12px;
-          color: #c4001a;
-          display: inline-block;
-        }
-        .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
-        .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
 
         .sc-stats {
           display: flex;
@@ -321,8 +307,6 @@ export default function Achievements() {
           padding: 1px 4px;
           border-width: 1px;
           border-style: solid;
-          line-height: 1.4;
-          user-select: none;
         }
 
         .sc-stat-num {
@@ -332,27 +316,8 @@ export default function Achievements() {
           line-height: 1;
           color: #ffffff;
           letter-spacing: 1px;
-          user-select: none;
-          transition: color 0.2s ease;
         }
         .sc-bar-outer.active .sc-stat-num { color: #111111; }
-
-        .sc-stat-bars {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          gap: 1px;
-          margin-top: 2px;
-        }
-        .sc-stat-bar-color {
-          height: 3px;
-          width: 100%;
-        }
-        .sc-stat-bar-black {
-          height: 2px;
-          width: 100%;
-          background: #000;
-        }
 
         .sc-char {
           position: absolute;
@@ -363,58 +328,9 @@ export default function Achievements() {
           max-width: 160px;
           object-fit: cover;
           object-position: top;
-          pointer-events: none;
           z-index: 3;
           clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
         }
-
-        @keyframes sc-right-nav-pop {
-          0%   { opacity: 0; transform: scale(0.55) translateY(-10px); }
-          65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .sc-right-nav {
-          position: fixed;
-          top: 40px;
-          right: 40px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          pointer-events: none;
-          z-index: 50;
-          animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
-        }
-        .sc-right-nav .sc-nav-btn {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 100px;
-          letter-spacing: 3px;
-          line-height: 1;
-          user-select: none;
-          color: #fff;
-          -webkit-text-stroke: 2px #000;
-          paint-order: stroke fill;
-          background: none;
-          border: none;
-          padding: 0 6px;
-        }
-        .sc-right-nav .sc-nav-label {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 28px;
-          letter-spacing: 3px;
-          line-height: 1;
-          user-select: none;
-          color: #111;
-          padding: 0 8px;
-        }
-        .sc-right-nav .sc-nav-arrow {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          color: #c4001a;
-          display: inline-block;
-          user-select: none;
-        }
-        .sc-right-nav .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
-        .sc-right-nav .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
 
         .sc-info-panel {
           position: fixed;
@@ -438,89 +354,58 @@ export default function Achievements() {
           filter: grayscale(60%);
         }
 
-        .sc-inspector {
-          position: fixed;
-          top: 0; right: 0; bottom: 0;
-          width: 420px;
-          background: rgba(10, 10, 14, 0.95);
-          border-left: 4px solid #c4001a;
-          z-index: 100;
-          transform: translateX(100%);
-          transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
-          padding: 60px 40px;
-          display: flex;
-          flex-direction: column;
-          box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-        }
-        .sc-inspector.open {
-          transform: translateX(0);
-        }
-        .sc-inspector-title {
-          font-family: 'Anton', sans-serif;
-          font-size: 42px;
-          color: #fff;
-          line-height: 1.1;
-          margin-bottom: 20px;
-        }
-        .sc-inspector-desc {
-          font-family: 'Barlow Condensed', sans-serif;
-          font-size: 22px;
-          color: #aaa;
-          letter-spacing: 1px;
-          line-height: 1.4;
-        }
-        .sc-inspector-close {
-          margin-top: auto;
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: 24px;
-          color: #c4001a;
-        }
-        
-        @keyframes sc-infobar-in {
-          0%   { opacity: 0; transform: translateX(40px); }
-          60%  { opacity: 1; transform: translateX(-4px); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
+        /* --- THE ACCORDION BOX STYLES --- */
         .sc-info-bar-wrap {
           position: relative;
-          right: auto;
-          left: auto;
           width: 100%;
-          height: 46px;
+          height: 46px; /* Default collapsed height */
           background: transparent;
           pointer-events: all;
           cursor: pointer;
           z-index: 1;
           padding: 0;
+          overflow: hidden;
+          /* Smooth accordion opening */
+          transition: height 0.35s cubic-bezier(0.22,1,0.36,1), background 0.3s, padding 0.3s;
           animation: sc-infobar-in 0.35s cubic-bezier(0.22,1,0.36,1) both;
         }
+        
         .sc-info-bar-wrap.selected {
           background: #111;
           padding: 1.5px;
           border-radius: 8px;
         }
+        
+        /* The Expanded State */
+        .sc-info-bar-wrap.expanded {
+          height: 140px; /* Opens up the box */
+        }
+
         .sc-info-bar {
           position: relative;
           width: 100%;
           height: 100%;
           background: transparent;
           display: flex;
-          align-items: center;
+          flex-direction: column; /* Stack the top row and description */
+          align-items: flex-start;
           overflow: hidden;
         }
+        
         .sc-info-bar-wrap.selected .sc-info-bar {
           background: #fff;
           border-radius: 7px;
         }
-        .sc-info-bar-new {
-          position: absolute;
-          left: -40px;
-          bottom: 0;
-          height: 65%;
-          width: auto;
-          pointer-events: none;
-          z-index: 3;
+
+        /* The Top Row of the Accordion */
+        .sc-info-bar-top {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 43px; /* Keeps the title locked to the top */
+          flex-shrink: 0;
         }
+
         .sc-info-bar-wrap.selected .sc-info-bar::before {
           content: '';
           position: absolute;
@@ -529,6 +414,25 @@ export default function Achievements() {
           background: #c4001a;
           z-index: 1;
         }
+
+        /* The Description Text */
+        .sc-info-bar-desc {
+          width: 100%;
+          padding: 6px 20px 10px 54px; /* Lines up exactly with the title text */
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 21px;
+          color: #444;
+          opacity: 0;
+          transform: translateY(-10px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        /* Fade the text in when expanded */
+        .sc-info-bar-wrap.expanded .sc-info-bar-desc {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
         .sc-info-bar-text {
           flex: 1;
           font-family: 'Bebas Neue', sans-serif;
@@ -538,6 +442,7 @@ export default function Achievements() {
           padding: 0 14px;
           user-select: none;
         }
+        
         .sc-info-bar-box {
           height: 70%;
           background: #000;
@@ -548,20 +453,15 @@ export default function Achievements() {
           font-size: 20px;
           letter-spacing: 1px;
           color: #fff;
-          flex-shrink: 0;
           border-radius: 6px;
           margin-right: 4px;
-          user-select: none;
         }
 
         .sc-info-bar-icon {
           height: 55%;
           width: auto;
-          flex-shrink: 0;
           margin-left: 14px;
           object-fit: contain;
-          pointer-events: none;
-          user-select: none;
         }
 
         .sc-info-bar-count {
@@ -570,8 +470,6 @@ export default function Achievements() {
           letter-spacing: 1px;
           color: #111;
           margin-right: 60px; 
-          flex-shrink: 0;
-          user-select: none;
         }
 
         .sc-footer {
@@ -581,10 +479,7 @@ export default function Achievements() {
           align-items: flex-end; gap: 5px;
           font-family: 'Bebas Neue', sans-serif;
           z-index: 50;
-          opacity: 0;
-          transition: opacity 0.4s ease 0.6s;
         }
-        .sc-footer.mounted { opacity: 1; }
         .sc-footer-row {
           display: flex; align-items: center; gap: 8px;
           font-size: 13px; letter-spacing: 2px;
@@ -596,72 +491,21 @@ export default function Achievements() {
           padding: 1px 6px; font-size: 11px;
         }
 
-        .sc-mobile-controls {
-          display: none;
-        }
-
-        .sc-mobile-btn {
-          border: 1px solid rgba(255, 255, 255, 0.28);
-          background: rgba(0, 0, 0, 0.62);
-          color: #fff;
-          font-family: 'Bebas Neue', sans-serif;
-          letter-spacing: 1.2px;
-          font-size: 13px;
-          padding: 7px 12px;
-          border-radius: 8px;
-          min-width: 84px;
-        }
-
         @media (max-width: 768px) {
-          .sc-root {
-            justify-content: flex-start;
-            padding-top: 12px;
-            gap: 3px;
-          }
-
-          .sc-info-panel {
-            top: min(47vh, 320px);
-            left: 8px;
-            right: 8px;
-            bottom: 58px;
-            gap: 4px;
-            padding: 4px 0;
-          }
-
-          .sc-info-bar-wrap {
+          .sc-info-bar-wrap:not(.expanded) {
             height: 38px !important;
           }
-
-          .sc-info-bar-text {
-            font-size: 15px;
-            letter-spacing: 1px;
+          .sc-info-bar-wrap.expanded {
+            height: 160px !important; /* Mobile needs more height for text */
           }
-
-          .sc-info-bar-count {
-            margin-right: 10px;
-            font-size: 14px;
-          }
-
-          .sc-footer {
-            display: none;
-          }
-
-          .sc-mobile-controls {
-            position: fixed;
-            left: 8px;
-            right: 8px;
-            bottom: max(8px, env(safe-area-inset-bottom));
-            z-index: 60;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; 
-            gap: 8px;
-            pointer-events: all;
+          .sc-info-panel {
+            top: min(47vh, 320px);
+            left: 8px; right: 8px; bottom: 58px;
           }
         }
       `}</style>
 
-      {/* Added focus condition to sc-root */}
+      {/* LEFT PANEL */}
       <div className={`sc-root ${focus === "right" ? "unfocused" : ""}`} role="navigation">
         {ITEMS.map((item, i) => (
           <div
@@ -669,11 +513,11 @@ export default function Achievements() {
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
             onClick={() => {
               setActive(i);
-              setFocus("left"); // Swaps focus to left on click
+              setFocus("left");
             }} 
             onMouseEnter={() => {
               setActive(i);
-              setFocus("left"); // Swaps focus to left on hover
+              setFocus("left");
             }}
           >
             <div className="sc-bar-red" />
@@ -709,65 +553,61 @@ export default function Achievements() {
         ))}
       </div>
 
-      {mounted && (
-        <div className="sc-right-nav" key={active}>
-          <span className="sc-nav-arrow left">◄</span>
-          <span className="sc-nav-btn">LB</span>
-          <span className="sc-nav-label">{ITEMS[active].label}</span>
-          <span className="sc-nav-btn">RB</span>
-          <span className="sc-nav-arrow right">►</span>
-        </div>
-      )}
-
+      {/* RIGHT PANEL - ACCORDION STYLE */}
       {mounted && (
         <div className={`sc-info-panel ${focus === "left" ? "unfocused" : ""}`} key={`panel-${active}`}>
-          {Array.from({ length: ITEMS[active].bars }).map((_, i) => (
-            <div
-              className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}`}
-              key={`bar-${active}-${i}`}
-              style={{ animationDelay: `${i * 50}ms` }}
-              onClick={() => {
-                setActiveInfoBar(i);
-                setFocus("right"); // Swaps focus to right on click
-              }} 
-              onMouseEnter={() => {
-                setActiveInfoBar(i);
-                setFocus("right"); // Swaps focus to right on hover
-              }}
-            >
-              {ITEMS[active].newBars.includes(i) && (
-                <img className="sc-info-bar-new" src={newsign} alt="" />
-              )}
-              <div className="sc-info-bar">
-                <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} alt="" />
-                <span className="sc-info-bar-text">{ITEMS[active].achievements[i]}</span>
-                <span className="sc-info-bar-box">YEAR</span>
-                <span className="sc-info-bar-count">{ITEMS[active].dates[i]}</span>
+          {Array.from({ length: ITEMS[active].bars }).map((_, i) => {
+            const isSelected = activeInfoBar === i;
+            // The box only shows as "expanded" if it is currently selected AND the accordion is open
+            const showExpanded = isSelected && isExpanded;
+
+            return (
+              <div
+                className={`sc-info-bar-wrap ${isSelected ? "selected" : ""} ${showExpanded ? "expanded" : ""}`}
+                key={`bar-${active}-${i}`}
+                style={{ animationDelay: `${i * 50}ms` }}
+                onClick={() => {
+                  if (isSelected) {
+                    // If you click the one that's already selected, toggle it open/closed
+                    setIsExpanded(!isExpanded); 
+                  } else {
+                    // If you click a different one, select it and auto-open it
+                    setActiveInfoBar(i);
+                    setIsExpanded(true);
+                  }
+                  setFocus("right");
+                }} 
+                onMouseEnter={() => {
+                  // Hovering just highlights it, it doesn't auto-expand to prevent jarring jumps
+                  setActiveInfoBar(i);
+                  setFocus("right");
+                }}
+              >
+                <div className="sc-info-bar">
+                  {/* The Top Row (Icon, Title, Year) */}
+                  <div className="sc-info-bar-top">
+                    <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} alt="" />
+                    <span className="sc-info-bar-text">{ITEMS[active].achievements[i]}</span>
+                    <span className="sc-info-bar-box">YEAR</span>
+                    <span className="sc-info-bar-count">{ITEMS[active].dates[i]}</span>
+                  </div>
+                  
+                  {/* The Expanded Description */}
+                  <div className="sc-info-bar-desc">
+                    {ITEMS[active].descriptions[i]}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
-      
-      <div className={`sc-inspector ${inspected ? "open" : ""}`}>
-        <div className="sc-inspector-title">
-          {ITEMS[active].achievements[activeInfoBar]}
-        </div>
-        <div className="sc-inspector-desc">
-          {ITEMS[active].descriptions ? ITEMS[active].descriptions[activeInfoBar] : "Details locked."}
-        </div>
-        <div className="sc-inspector-close">ESC TO CLOSE</div>
-      </div>
-      
-      <div className={`sc-footer${mounted ? " mounted" : ""}`}>
-        <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
-        <div className="sc-footer-row"><span className="sc-footer-key">ESC</span><span>BACK</span></div>
-      </div>
 
-      <div className="sc-mobile-controls" aria-label="Achievements mobile controls">
-        <button className="sc-mobile-btn" type="button" onClick={() => navigate(-1)}>
-          BACK
-        </button>
+      {/* FOOTER HINTS */}
+      <div className={`sc-footer${mounted ? " mounted" : ""}`}>
+        <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>NAVIGATE</span></div>
+        <div className="sc-footer-row"><span className="sc-footer-key">↵</span><span>{isExpanded ? "CLOSE" : "INSPECT"}</span></div>
+        <div className="sc-footer-row"><span className="sc-footer-key">{isExpanded ? "◄" : "ESC"}</span><span>BACK</span></div>
       </div>
     </div>
   );
