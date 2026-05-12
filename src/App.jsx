@@ -49,5 +49,21 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
-  return <AnimatedRoutes />
+  return (
+    <>
+      <video 
+        src={menuVideo} 
+        autoPlay loop muted playsInline 
+        style={{
+          position: 'fixed',
+          inset: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          zIndex: -1 /* Keeps it behind your pages */
+        }} 
+      />
+      <AnimatedRoutes />
+    </>
+  )
 }
