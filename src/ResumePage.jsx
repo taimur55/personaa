@@ -64,15 +64,16 @@ const ITEMS = [
       panelTitle: "WORK HISTORY",
       progress: "Lv.2",
       rows: [
-        { index: "01", title: "Frontend Developer Intern", status: "2023" },
-        { index: "02", title: "Freelance Web Designer", status: "2022-24" },
-        { index: "03", title: "Open Source Contributor", status: "Ongoing" },
+        { index: "01", title: "Engineering Intern", status: "2025" },
+        { index: "02", title: "Startup Engineer", status: "Ongoing" },
+        { index: "03", title: "Waiter", status: "2021-present" },
         { index: "04", title: "Full-Time Role", status: "Seeking" },
       ],
       bullets: [
-        "- Collaborate with cross-functional teams to deliver software on time.",
-        "- Write clean, maintainable, and well-documented code.",
-        "- Adapt quickly to new tech stacks and development environments.",
+        "- Interned at Woodruff Engineering primarily over the summer of 2025.",
+        "- Currently working for a startup focused on robotic applications for nuclear fusion (Maximum Robotics).",
+        "- Worked as a temporary waiter for 5-star hotels in London during my A levels.",
+        "- More detail for these roles are on my LinkedIn.",
       ]
     }
   },
