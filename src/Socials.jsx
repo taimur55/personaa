@@ -9,51 +9,66 @@ import icon1 from "./assets/icon1.png";
 import icon2 from "./assets/icon2.png";
 import icon3 from "./assets/icon3.png";
 
-
 const CHARS = [char1, char2, char3];
 
+// Changed roles to match the timeline vibe
 const ROLES = [
-  { text: "LEADER", color: "#e8c100", bg: "rgba(232,193,0,0.12)", border: "rgba(232,193,0,0.5)" },
-  { text: "PARTY",  color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
-  { text: "PARTY",  color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
+  { text: "CURRENT", color: "#e8c100", bg: "rgba(232,193,0,0.12)", border: "rgba(232,193,0,0.5)" },
+  { text: "PAST",    color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
+  { text: "EXTRA",   color: "#ff4a8f", bg: "rgba(255,74,143,0.12)", border: "rgba(255,74,143,0.5)" },
 ];
 
+// Completely revamped ITEMS array for achievements
 const ITEMS = [
   {
-    id: "twitch", label: "TWITCH", handle: "@yourname", href: "https://twitch.tv/yourname", icon: "🎮", barIcon: icon1, bars: 1, newBars: [0], counts: ["56"],
-    links: ["twitch.tv/videos/2041837265"],
+    id: "university", label: "UNIVERSITY", icon: "🎓", barIcon: icon1, bars: 4, newBars: [0], 
+    dates: ["2023", "2023", "2022", "2022"],
+    achievements: [
+      "Dean's List / First Class Honours", 
+      "Engineering Society Project Lead", 
+      "Robotics Competition Finalist", 
+      "Top Grade in Kinematics Module"
+    ],
     stats: [
-      { tag: "FOL", value: "1.2K", color: "#9147ff" },
-      { tag: "VWR", value: "042",  color: "#bf94ff" },
+      { tag: "YEAR", value: "3RD", color: "#9147ff" },
+      { tag: "AWDS", value: "04",  color: "#bf94ff" },
     ],
   },
   {
-    id: "instagram", label: "INSTAGRAM", handle: "@yourhandle", href: "https://instagram.com/yourhandle", icon: "📷", barIcon: icon2, bars: 5, newBars: [1, 2], counts: ["3.4M", "2.5M", "676K", "412K", "198K"],
-    links: ["instagram.com/p/C4xQmRrNk2a", "instagram.com/p/C3wLpBsOj7f", "instagram.com/reel/C2vKoArMi6e", "instagram.com/p/C1uJnZqLh5d", "instagram.com/reel/C0tImYpKg4c"],
+    id: "secondary", label: "SECONDARY", icon: "🏫", barIcon: icon2, bars: 3, newBars: [], 
+    dates: ["2021", "2021", "2019"],
+    achievements: [
+      "A* A A in Advanced Levels", 
+      "Head Boy / Student Prefect", 
+      "Gold in National Math Challenge"
+    ],
     stats: [
-      { tag: "FOL", value: "3.4K", color: "#e1306c" },
-      { tag: "PST", value: "128",  color: "#f77737" },
+      { tag: "ALVL", value: "03", color: "#e1306c" },
+      { tag: "GCSE", value: "13", color: "#f77737" },
     ],
   },
   {
-    id: "tiktok", label: "TIKTOK", handle: "@yourhandle", href: "https://tiktok.com/@yourhandle", icon: "🎵", barIcon: icon3, bars: 7, newBars: [0, 3, 5, 6], counts: ["5.1M", "3.7M", "2.2M", "1.4M", "831K", "490K", "217K"],
-    links: ["tiktok.com/@yourhandle/video/7318492016374859054", "tiktok.com/@yourhandle/video/7305837261940183342", "tiktok.com/@yourhandle/video/7291046385720348974", "tiktok.com/@yourhandle/video/7278392047163820334", "tiktok.com/@yourhandle/video/7264819203847165742", "tiktok.com/@yourhandle/video/7251047382916430126", "tiktok.com/@yourhandle/video/7237294018463851822"],
+    id: "misc", label: "MISC", icon: "🏆", barIcon: icon3, bars: 4, newBars: [0, 1], 
+    dates: ["2024", "2023", "2021", "2019"],
+    achievements: [
+      "AWS Cloud Practitioner Cert", 
+      "SolidWorks CSWA Certified", 
+      "Duke of Edinburgh Gold Award", 
+      "Grade 8 Piano Examination"
+    ],
     stats: [
-      { tag: "FOL", value: "8.9K", color: "#00f2ea" },
-      { tag: "LKS", value: "52K",  color: "#ff0050" },
+      { tag: "CERT", value: "02", color: "#00f2ea" },
+      { tag: "XTRA", value: "04", color: "#ff0050" },
     ],
   },
 ];
 
-export default function Socials() {
+export default function Achievements() {
   const [active, setActive]               = useState(0);
   const [mounted, setMounted]             = useState(false);
   const [activeInfoBar, setActiveInfoBar] = useState(0);
   const [focus, setFocus]                 = useState("left"); // "left" | "right"
   const navigate = useNavigate();
-
-  const isMobileViewport =
-    typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 60);
@@ -66,13 +81,13 @@ export default function Socials() {
         if (e.key === "ArrowUp")    setActive(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown")  setActive(i => Math.min(ITEMS.length - 1, i + 1));
         if (e.key === "ArrowRight") { setFocus("right"); setActiveInfoBar(0); }
-        if (e.key === "Enter")      window.open(ITEMS[active].href, "_blank");
+        // Note: Removed the "window.open" Enter key logic here!
       } else {
         const barCount = ITEMS[active].bars;
-        if (e.key === "ArrowUp")   setActiveInfoBar(i => Math.max(0, i - 1));
+        if (e.key === "ArrowUp")    setActiveInfoBar(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown") setActiveInfoBar(i => Math.min(barCount - 1, i + 1));
         if (e.key === "ArrowLeft") setFocus("left");
-        if (e.key === "Enter")     window.open("https://" + ITEMS[active].links[activeInfoBar], "_blank");
+        // Removed the external link behavior from the right panel too
       }
       if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
     };
@@ -99,7 +114,6 @@ export default function Socials() {
           padding-left: 0;
         }
 
-        /* ── Each bar ── */
         .sc-bar {
           position: relative;
           width: 45vw;
@@ -113,7 +127,6 @@ export default function Socials() {
           z-index: 1;
         }
 
-        /* wrapper holds both the red underlay and the bar */
         .sc-bar-outer {
           position: relative;
           flex-shrink: 0;
@@ -127,7 +140,6 @@ export default function Socials() {
         .sc-bar-outer:nth-child(2) { transition-delay: 80ms; }
         .sc-bar-outer:nth-child(3) { transition-delay: 160ms; }
 
-        /* red underlay — peeks out below the bar when active */
         .sc-bar-red {
           position: absolute;
           top: 0; left: 0;
@@ -143,7 +155,6 @@ export default function Socials() {
         }
         .sc-bar-outer.active .sc-bar-red { opacity: 1; }
 
-        /* white fill — skewed parallelogram on the right 25% */
         .sc-bar-fill {
           position: absolute;
           inset: 0;
@@ -157,7 +168,6 @@ export default function Socials() {
           clip-path: polygon(22% 0, 100% 0, calc(100% - 14px) 100%, calc(22% + 138px) 100%);
         }
 
-        /* shade on the left edge of the white fill */
         .sc-bar-shade {
           position: absolute;
           top: 0; bottom: 0;
@@ -171,7 +181,6 @@ export default function Socials() {
         }
         .sc-bar-outer.active .sc-bar-shade { opacity: 1; }
 
-        /* bottom shadow line under each bar */
         .sc-bar::after {
           content: '';
           position: absolute;
@@ -182,7 +191,6 @@ export default function Socials() {
           pointer-events: none;
         }
 
-        /* content layout inside each bar */
         .sc-bar-content {
           position: relative;
           z-index: 2;
@@ -193,7 +201,6 @@ export default function Socials() {
           padding: 0 20px 0 20px;
         }
 
-        /* left: role label */
         .sc-role {
           display: flex;
           align-items: center;
@@ -208,7 +215,6 @@ export default function Socials() {
           padding: 0 16px 0 8px;
         }
 
-        /* left: icon + name centered in remaining space */
         .sc-main {
           flex: 1;
           display: flex;
@@ -246,14 +252,13 @@ export default function Socials() {
         }
         .sc-bar-outer.active .sc-label { color: #111111; }
 
-        /* lb/rb nav row */
         @keyframes sc-arrow-left {
           0%, 100% { transform: translateX(0); opacity: 1; }
-          50%       { transform: translateX(-5px); opacity: 0.4; }
+          50%      { transform: translateX(-5px); opacity: 0.4; }
         }
         @keyframes sc-arrow-right {
           0%, 100% { transform: translateX(0); opacity: 1; }
-          50%       { transform: translateX(5px); opacity: 0.4; }
+          50%      { transform: translateX(5px); opacity: 0.4; }
         }
         .sc-nav-btn {
           font-family: 'Bebas Neue', sans-serif;
@@ -273,7 +278,6 @@ export default function Socials() {
         .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
         .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
 
-        /* right: stats group */
         .sc-stats {
           display: flex;
           align-items: center;
@@ -334,7 +338,6 @@ export default function Socials() {
           background: #000;
         }
 
-        /* character portrait */
         .sc-char {
           position: absolute;
           top: 0;
@@ -349,7 +352,6 @@ export default function Socials() {
           clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
         }
 
-        /* right-side nav bar */
         @keyframes sc-right-nav-pop {
           0%   { opacity: 0; transform: scale(0.55) translateY(-10px); }
           65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
@@ -398,12 +400,11 @@ export default function Socials() {
         .sc-right-nav .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
         .sc-right-nav .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
 
-        /* info panel */
         .sc-info-panel {
           position: fixed;
           top: 132px;
           right: 0;
-          left: 65%;
+          left: 55%; /* Pulled left slightly to give text more room */
           bottom: 84px;
           z-index: 50;
           display: flex;
@@ -468,11 +469,12 @@ export default function Socials() {
           background: #c4001a;
           z-index: 1;
         }
+        /* Increased font size slightly and removed slice limit for longer text */
         .sc-info-bar-text {
           flex: 1;
           font-family: 'Bebas Neue', sans-serif;
-          font-size: 22px;
-          letter-spacing: 2px;
+          font-size: 21px; 
+          letter-spacing: 1.5px;
           color: #111;
           padding: 0 14px;
           user-select: none;
@@ -508,12 +510,11 @@ export default function Socials() {
           font-size: 22px;
           letter-spacing: 1px;
           color: #111;
-          margin-right: 80px;
+          margin-right: 60px; /* Adjusted to fit the wider panel */
           flex-shrink: 0;
           user-select: none;
         }
 
-        /* footer hints */
         .sc-footer {
           position: fixed;
           bottom: 20px; right: 28px;
@@ -594,7 +595,7 @@ export default function Socials() {
             z-index: 60;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start; /* Removed space-between since we deleted the Open button */
             gap: 8px;
             pointer-events: all;
           }
@@ -606,10 +607,7 @@ export default function Socials() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onClick={() => {
-              if (active === i) window.open(item.href, "_blank");
-              else setActive(i);
-            }}
+            onClick={() => setActive(i)} // Removed external URL behavior
             onMouseEnter={() => setActive(i)}
           >
             <div className="sc-bar-red" />
@@ -662,13 +660,7 @@ export default function Socials() {
               className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}`}
               key={`bar-${active}-${i}`}
               style={{ animationDelay: `${i * 50}ms` }}
-              onClick={() => {
-                if (isMobileViewport || activeInfoBar === i) {
-                  window.open("https://" + ITEMS[active].links[i], "_blank");
-                  return;
-                }
-                setActiveInfoBar(i);
-              }}
+              onClick={() => setActiveInfoBar(i)} // Removed external URL behavior
               onMouseEnter={() => setActiveInfoBar(i)}
             >
               {ITEMS[active].newBars.includes(i) && (
@@ -676,9 +668,12 @@ export default function Socials() {
               )}
               <div className="sc-info-bar">
                 <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} alt="" />
-                <span className="sc-info-bar-text">{ITEMS[active].links[i].slice(0, 10)}...</span>
-                <span className="sc-info-bar-box">VIEWS</span>
-                <span className="sc-info-bar-count">{ITEMS[active].counts[i]}</span>
+                {/* Now shows the full achievement text without slicing it short */}
+                <span className="sc-info-bar-text">{ITEMS[active].achievements[i]}</span>
+                {/* Changed the box text from VIEWS to YEAR */}
+                <span className="sc-info-bar-box">YEAR</span>
+                {/* Now displays the date array value */}
+                <span className="sc-info-bar-count">{ITEMS[active].dates[i]}</span>
               </div>
             </div>
           ))}
@@ -687,20 +682,12 @@ export default function Socials() {
 
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
         <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
-        <div className="sc-footer-row"><span className="sc-footer-key">↵</span><span>OPEN</span></div>
         <div className="sc-footer-row"><span className="sc-footer-key">ESC</span><span>BACK</span></div>
       </div>
 
-      <div className="sc-mobile-controls" aria-label="Socials mobile controls">
+      <div className="sc-mobile-controls" aria-label="Achievements mobile controls">
         <button className="sc-mobile-btn" type="button" onClick={() => navigate(-1)}>
           BACK
-        </button>
-        <button
-          className="sc-mobile-btn"
-          type="button"
-          onClick={() => window.open(ITEMS[active].href, "_blank")}
-        >
-          OPEN
         </button>
       </div>
     </div>
