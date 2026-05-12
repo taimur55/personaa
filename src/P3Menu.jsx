@@ -5,7 +5,7 @@ const ITEMS = [
   { id: "about",   label: "ABOUT ME",      page: "about",    fontSize: 80, offsetX: 0,  offsetY: 0,  skew: -6,  skewY: 10  },
   { id: "resume",  label: "CV",        page: "resume",   fontSize: 66, offsetX: 20, offsetY: 8,  skew: -11, skewY: -10 },
   { id: "github",  label: "LINKEDIN",   url: "https://www.linkedin.com/in/taimur-khan-871915214/",  fontSize: 68, offsetX: 8,  offsetY: 6,  skew: 0,   skewY: -4  },
-  { id: "socials", label: "SOCIALS",       page: "socials",  fontSize: 74, offsetX: 16, offsetY: 8,  skew: -3,  skewY: 5   },
+  { id: "socials", label: "ACHIEVEMENTS",       page: "socials",  fontSize: 74, offsetX: 16, offsetY: 8,  skew: -3,  skewY: 5   },
 ];
 
 // The original sharp, edgy shape used for the highlights
