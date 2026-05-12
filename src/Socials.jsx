@@ -29,6 +29,12 @@ const ITEMS = [
       "Robotics Competition Finalist", 
       "Top Grade in Kinematics Module"
     ],
+    descriptions: [
+      "Awarded for maintaining a top-tier GPA across all core Mechatronics modules.",
+      "Led a team of 15 students to build a fully autonomous line-following robot.",
+      "Placed in the top 10 out of 50+ university teams in the national robotics arena.",
+      "Achieved 98% in the final examination for complex kinematic equations."
+    ],
     stats: [
       { tag: "YEAR", value: "3RD", color: "#9147ff" },
       { tag: "AWDS", value: "04",  color: "#bf94ff" },
@@ -68,6 +74,7 @@ export default function Achievements() {
   const [mounted, setMounted]             = useState(false);
   const [activeInfoBar, setActiveInfoBar] = useState(0);
   const [focus, setFocus]                 = useState("left"); // "left" | "right"
+  const [inspected, setInspected]         = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,6 +93,11 @@ export default function Achievements() {
         if (e.key === "ArrowUp")    setActiveInfoBar(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown") setActiveInfoBar(i => Math.min(barCount - 1, i + 1));
         if (e.key === "ArrowLeft") setFocus("left");
+        if (e.key === "Enter") setInspected(true);
+      }
+      if (e.key === "Escape" || e.key === "Backspace") {
+        if (inspected) setInspected(false);
+        else navigate(-1);
       }
       if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
     };
@@ -426,6 +438,44 @@ export default function Achievements() {
           filter: grayscale(60%);
         }
 
+        .sc-inspector {
+          position: fixed;
+          top: 0; right: 0; bottom: 0;
+          width: 420px;
+          background: rgba(10, 10, 14, 0.95);
+          border-left: 4px solid #c4001a;
+          z-index: 100;
+          transform: translateX(100%);
+          transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+          padding: 60px 40px;
+          display: flex;
+          flex-direction: column;
+          box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+        }
+        .sc-inspector.open {
+          transform: translateX(0);
+        }
+        .sc-inspector-title {
+          font-family: 'Anton', sans-serif;
+          font-size: 42px;
+          color: #fff;
+          line-height: 1.1;
+          margin-bottom: 20px;
+        }
+        .sc-inspector-desc {
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 22px;
+          color: #aaa;
+          letter-spacing: 1px;
+          line-height: 1.4;
+        }
+        .sc-inspector-close {
+          margin-top: auto;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 24px;
+          color: #c4001a;
+        }
+        
         @keyframes sc-infobar-in {
           0%   { opacity: 0; transform: translateX(40px); }
           60%  { opacity: 1; transform: translateX(-4px); }
@@ -698,7 +748,17 @@ export default function Achievements() {
           ))}
         </div>
       )}
-
+      
+      <div className={`sc-inspector ${inspected ? "open" : ""}`}>
+        <div className="sc-inspector-title">
+          {ITEMS[active].achievements[activeInfoBar]}
+        </div>
+        <div className="sc-inspector-desc">
+          {ITEMS[active].descriptions ? ITEMS[active].descriptions[activeInfoBar] : "Details locked."}
+        </div>
+        <div className="sc-inspector-close">ESC TO CLOSE</div>
+      </div>
+      
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
         <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
         <div className="sc-footer-row"><span className="sc-footer-key">ESC</span><span>BACK</span></div>
