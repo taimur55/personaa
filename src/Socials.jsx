@@ -81,13 +81,11 @@ export default function Achievements() {
         if (e.key === "ArrowUp")    setActive(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown")  setActive(i => Math.min(ITEMS.length - 1, i + 1));
         if (e.key === "ArrowRight") { setFocus("right"); setActiveInfoBar(0); }
-        // Note: Removed the "window.open" Enter key logic here!
       } else {
         const barCount = ITEMS[active].bars;
         if (e.key === "ArrowUp")    setActiveInfoBar(i => Math.max(0, i - 1));
         if (e.key === "ArrowDown") setActiveInfoBar(i => Math.min(barCount - 1, i + 1));
         if (e.key === "ArrowLeft") setFocus("left");
-        // Removed the external link behavior from the right panel too
       }
       if ((e.key === "ArrowLeft" && focus === "left") || e.key === "Escape" || e.key === "Backspace") navigate(-1);
     };
@@ -100,7 +98,7 @@ export default function Achievements() {
       <video src={bgVideo} autoPlay loop muted playsInline />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&display=swap');
-
+        
         .sc-root {
           position: absolute;
           inset: 0;
@@ -112,6 +110,12 @@ export default function Achievements() {
           justify-content: center;
           gap: 6px;
           padding-left: 0;
+          transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+        
+        .sc-root.unfocused {
+          opacity: 0.4;
+          filter: grayscale(60%);
         }
 
         .sc-bar {
@@ -404,7 +408,7 @@ export default function Achievements() {
           position: fixed;
           top: 132px;
           right: 0;
-          left: 55%; /* Pulled left slightly to give text more room */
+          left: 55%; 
           bottom: 84px;
           z-index: 50;
           display: flex;
@@ -414,6 +418,12 @@ export default function Achievements() {
           overflow-y: auto;
           overflow-x: hidden;
           pointer-events: none;
+          transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .sc-info-panel.unfocused {
+          opacity: 0.35;
+          filter: grayscale(60%);
         }
 
         @keyframes sc-infobar-in {
@@ -469,7 +479,6 @@ export default function Achievements() {
           background: #c4001a;
           z-index: 1;
         }
-        /* Increased font size slightly and removed slice limit for longer text */
         .sc-info-bar-text {
           flex: 1;
           font-family: 'Bebas Neue', sans-serif;
@@ -510,7 +519,7 @@ export default function Achievements() {
           font-size: 22px;
           letter-spacing: 1px;
           color: #111;
-          margin-right: 60px; /* Adjusted to fit the wider panel */
+          margin-right: 60px; 
           flex-shrink: 0;
           user-select: none;
         }
@@ -595,20 +604,27 @@ export default function Achievements() {
             z-index: 60;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Removed space-between since we deleted the Open button */
+            justify-content: flex-start; 
             gap: 8px;
             pointer-events: all;
           }
         }
       `}</style>
 
-      <div className="sc-root" role="navigation">
+      {/* Added focus condition to sc-root */}
+      <div className={`sc-root ${focus === "right" ? "unfocused" : ""}`} role="navigation">
         {ITEMS.map((item, i) => (
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onClick={() => setActive(i)} // Removed external URL behavior
-            onMouseEnter={() => setActive(i)}
+            onClick={() => {
+              setActive(i);
+              setFocus("left"); // Swaps focus to left on click
+            }} 
+            onMouseEnter={() => {
+              setActive(i);
+              setFocus("left"); // Swaps focus to left on hover
+            }}
           >
             <div className="sc-bar-red" />
             <div className="sc-bar">
@@ -654,25 +670,29 @@ export default function Achievements() {
       )}
 
       {mounted && (
-        <div className="sc-info-panel" key={`panel-${active}`}>
+        {/* Added focus condition to sc-info-panel */}
+        <div className={`sc-info-panel ${focus === "left" ? "unfocused" : ""}`} key={`panel-${active}`}>
           {Array.from({ length: ITEMS[active].bars }).map((_, i) => (
             <div
               className={`sc-info-bar-wrap${activeInfoBar === i ? " selected" : ""}`}
               key={`bar-${active}-${i}`}
               style={{ animationDelay: `${i * 50}ms` }}
-              onClick={() => setActiveInfoBar(i)} // Removed external URL behavior
-              onMouseEnter={() => setActiveInfoBar(i)}
+              onClick={() => {
+                setActiveInfoBar(i);
+                setFocus("right"); // Swaps focus to right on click
+              }} 
+              onMouseEnter={() => {
+                setActiveInfoBar(i);
+                setFocus("right"); // Swaps focus to right on hover
+              }}
             >
               {ITEMS[active].newBars.includes(i) && (
                 <img className="sc-info-bar-new" src={newsign} alt="" />
               )}
               <div className="sc-info-bar">
                 <img className="sc-info-bar-icon" src={ITEMS[active].barIcon} alt="" />
-                {/* Now shows the full achievement text without slicing it short */}
                 <span className="sc-info-bar-text">{ITEMS[active].achievements[i]}</span>
-                {/* Changed the box text from VIEWS to YEAR */}
                 <span className="sc-info-bar-box">YEAR</span>
-                {/* Now displays the date array value */}
                 <span className="sc-info-bar-count">{ITEMS[active].dates[i]}</span>
               </div>
             </div>
