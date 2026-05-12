@@ -29,15 +29,15 @@ const ITEMS = [
       panelTitle: "SKILLS LOG",
       progress: "MAX",
       rows: [
-        { index: "01", title: "React & JavaScript", status: "Proficient" },
-        { index: "02", title: "UI/UX Prototyping", status: "Advanced" },
-        { index: "03", title: "CSS & Animations", status: "Advanced" },
-        { index: "04", title: "Backend Integration", status: "Developing" },
+        { index: "01", title: "Programming in C,C++", status: "Developing" },
+        { index: "02", title: "CAD Design", status: "Advanced" },
+        { index: "03", title: "Electronic System Design", status: "Proficient" },
+        { index: "04", title: "PCB Design", status: "Developing" },
       ],
       bullets: [
-        "- Focus on building highly interactive, accessible web applications.",
-        "- Translate design mockups into pixel-perfect React components.",
-        "- Stay updated with modern CSS features and animation libraries.",
+        "- Have developed and built multiple embedded systems.",
+        "- Proficient in CAD using Solidworks and Autodesk Inventor",
+        "- Designed Control Systems with full wiring details",
       ]
     }
   },
