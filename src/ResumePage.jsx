@@ -36,8 +36,8 @@ const ITEMS = [
       ],
       bullets: [
         "- Have developed and built multiple embedded systems.",
-        "- Proficient in CAD using Solidworks and Autodesk Inventor",
-        "- Designed Control Systems with full wiring details",
+        "- Proficient in CAD using Solidworks and Autodesk Inventor.",
+        "- Designed Control Systems with full wiring details.",
       ]
     }
   },
@@ -47,15 +47,14 @@ const ITEMS = [
       panelTitle: "PROJECT ARCHIVE",
       progress: "3/3",
       rows: [
-        { index: "01", title: "Persona UI Clone", status: "Deployed" },
-        { index: "02", title: "E-Commerce Storefront", status: "Complete" },
-        { index: "03", title: "Task Management App", status: "Archived" },
-        { index: "04", title: "Portfolio V2", status: "In Progress" },
+        { index: "01", title: "Persona 3 UI Clone", status: "Deployed" },
+        { index: "02", title: "Robot Buggies", status: "Complete" },
+        { index: "03", title: "Blender Practice", status: "Archived" },
       ],
       bullets: [
-        "- Architect scalable solutions from the ground up.",
-        "- Implement responsive, mobile-first design philosophies.",
-        "- Deploy and maintain projects using modern CI/CD pipelines.",
+        "- Built many robot buggies programmed in C, C++ and Python.",
+        "- Practice using Blender for 3D modelling and twinning.",
+        "- More side project details are on my LinkedIn.",
       ]
     }
   },
