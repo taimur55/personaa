@@ -7,17 +7,19 @@ const ITEMS = [
     id: "i", badge: "I", title: "EDUCATION", subtitle: "University / Secondary", rank: 3,
     details: {
       panelTitle: "EDUCATION LOG",
-      progress: "7/5",
+      progress: "3/4",
       rows: [
-        { index: "01", title: "General Education", status: "Complete" },
-        { index: "02", title: "Computer Science Core", status: "In Progress" },
-        { index: "03", title: "Elective Track", status: "Queued" },
-        { index: "04", title: "Capstone Prep", status: "Pending" },
+        { index: "01", title: "MEng Mechatronic Engineering", status: "Third Year" },
+        { index: "02", title: "A Levels", status: "A*AA" },
+        { index: "03", title: "AS Levels", status: "AAAA" },
+        { index: "04", title: "GCSEs", status: "All grades 7-9" },
       ],
       bullets: [
-        "- Maintain progress across required classes and supporting work.",
-        "- Track portfolio-ready projects tied to coursework and labs.",
-        "- Keep materials prepared for internships, research, and review.",
+        "- Currently studying at the University of Manchester",
+        "- Studied at Wembley High Technology College for A levels and GCSEs",
+        "- A levels in Maths, Physics and Further Maths",
+        "- AS levels in Maths, Physics, Further Maths and Economics",
+        "- 13 different GCSE subjects all achieved at grades 7-9",
       ]
     }
   },
