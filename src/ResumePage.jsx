@@ -1,23 +1,85 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// We have moved the details into the ITEMS array so the panel updates dynamically!
 const ITEMS = [
-  { id: "i", badge: "I", title: "EDUCATION", subtitle: "University / Coursework", rank: 3 },
-  { id: "ii", badge: "II", title: "SKILLS", subtitle: "Frontend / Design / UI", rank: 4 },
-  { id: "iii", badge: "III", title: "PROJECTS", subtitle: "Featured Work", rank: 5 },
-  { id: "iv", badge: "IV", title: "EXPERIENCE", subtitle: "Internships / Roles", rank: 2 },
-];
-
-const EDUCATION_ROWS = [
-  { index: "01", title: "General Education", status: "Complete" },
-  { index: "02", title: "Computer Science Core", status: "In Progress" },
-  { index: "03", title: "Elective Track", status: "Queued" },
-  { index: "04", title: "Capstone Prep", status: "Pending" },
+  { 
+    id: "i", badge: "I", title: "EDUCATION", subtitle: "University / Secondary", rank: 3,
+    details: {
+      panelTitle: "EDUCATION LOG",
+      progress: "7/5",
+      rows: [
+        { index: "01", title: "General Education", status: "Complete" },
+        { index: "02", title: "Computer Science Core", status: "In Progress" },
+        { index: "03", title: "Elective Track", status: "Queued" },
+        { index: "04", title: "Capstone Prep", status: "Pending" },
+      ],
+      bullets: [
+        "- Maintain progress across required classes and supporting work.",
+        "- Track portfolio-ready projects tied to coursework and labs.",
+        "- Keep materials prepared for internships, research, and review.",
+      ]
+    }
+  },
+  { 
+    id: "ii", badge: "II", title: "SKILLS", subtitle: "Frontend / Design / UI", rank: 4,
+    details: {
+      panelTitle: "SKILLS LOG",
+      progress: "MAX",
+      rows: [
+        { index: "01", title: "React & JavaScript", status: "Proficient" },
+        { index: "02", title: "UI/UX Prototyping", status: "Advanced" },
+        { index: "03", title: "CSS & Animations", status: "Advanced" },
+        { index: "04", title: "Backend Integration", status: "Developing" },
+      ],
+      bullets: [
+        "- Focus on building highly interactive, accessible web applications.",
+        "- Translate design mockups into pixel-perfect React components.",
+        "- Stay updated with modern CSS features and animation libraries.",
+      ]
+    }
+  },
+  { 
+    id: "iii", badge: "III", title: "PROJECTS", subtitle: "Featured Work", rank: 5,
+    details: {
+      panelTitle: "PROJECT ARCHIVE",
+      progress: "3/3",
+      rows: [
+        { index: "01", title: "Persona UI Clone", status: "Deployed" },
+        { index: "02", title: "E-Commerce Storefront", status: "Complete" },
+        { index: "03", title: "Task Management App", status: "Archived" },
+        { index: "04", title: "Portfolio V2", status: "In Progress" },
+      ],
+      bullets: [
+        "- Architect scalable solutions from the ground up.",
+        "- Implement responsive, mobile-first design philosophies.",
+        "- Deploy and maintain projects using modern CI/CD pipelines.",
+      ]
+    }
+  },
+  { 
+    id: "iv", badge: "IV", title: "EXPERIENCE", subtitle: "Internships / Roles", rank: 2,
+    details: {
+      panelTitle: "WORK HISTORY",
+      progress: "Lv.2",
+      rows: [
+        { index: "01", title: "Frontend Developer Intern", status: "2023" },
+        { index: "02", title: "Freelance Web Designer", status: "2022-24" },
+        { index: "03", title: "Open Source Contributor", status: "Ongoing" },
+        { index: "04", title: "Full-Time Role", status: "Seeking" },
+      ],
+      bullets: [
+        "- Collaborate with cross-functional teams to deliver software on time.",
+        "- Write clean, maintainable, and well-documented code.",
+        "- Adapt quickly to new tech stacks and development environments.",
+      ]
+    }
+  },
 ];
 
 export default function ResumePage({ src }) {
   const navigate = useNavigate();
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0); // Set to 0 so the first item highlights on load
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -36,6 +98,9 @@ export default function ResumePage({ src }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [navigate]);
+
+  // Grab the details for the currently active item
+  const currentDetails = ITEMS[active].details;
 
   return (
     <div id="menu-screen">
@@ -435,16 +500,18 @@ export default function ResumePage({ src }) {
           ))}
         </div>
 
-        {active === 0 && (
+        {/* The Panel is now fully dynamic! It reads from currentDetails */}
+        {currentDetails && (
           <div className="resume-detail-panel">
             <div className="resume-detail-top">
-              <div className="resume-detail-top-index">01</div>
-              <div className="resume-detail-top-title">EDUCATION LOG</div>
-              <div className="resume-detail-top-progress">7/5</div>
+              {/* This automatically formats the number to 01, 02, 03, 04 based on active index */}
+              <div className="resume-detail-top-index">{`0${active + 1}`}</div>
+              <div className="resume-detail-top-title">{currentDetails.panelTitle}</div>
+              <div className="resume-detail-top-progress">{currentDetails.progress}</div>
             </div>
 
             <div className="resume-detail-list">
-              {EDUCATION_ROWS.map((row) => (
+              {currentDetails.rows.map((row) => (
                 <div className="resume-detail-row" key={row.index}>
                   <div className="resume-detail-row-index">{row.index}</div>
                   <div className="resume-detail-row-title">{row.title}</div>
@@ -456,9 +523,9 @@ export default function ResumePage({ src }) {
             <div className="resume-detail-bottom">
               <div className="resume-detail-bottom-title">DETAILS</div>
               <div className="resume-detail-bullets">
-                <div className="resume-detail-bullet">- Maintain progress across required classes and supporting work.</div>
-                <div className="resume-detail-bullet">- Track portfolio-ready projects tied to coursework and labs.</div>
-                <div className="resume-detail-bullet">- Keep materials prepared for internships, research, and review.</div>
+                {currentDetails.bullets.map((bullet, idx) => (
+                  <div className="resume-detail-bullet" key={idx}>{bullet}</div>
+                ))}
               </div>
             </div>
           </div>
