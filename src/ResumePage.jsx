@@ -73,7 +73,7 @@ const ITEMS = [
         "- Interned at Woodruff Engineering primarily over the summer of 2025.",
         "- Currently working for a startup focused on robotic applications for nuclear fusion (Maximum Robotics).",
         "- Worked as a temporary waiter for 5-star hotels in London during my A levels.",
-        "- More detail for these roles are on my LinkedIn.",
+        "- More  for these roles are on my LinkedIn.",
       ]
     }
   },
@@ -317,7 +317,7 @@ export default function ResumePage({ src }) {
           min-height: 74vh;
           z-index: 12;
           padding: 22px 24px 24px 24px;
-          background: linear-gradient(180deg, rgba(15, 28, 105, 0.96) 0%, rgba(8, 16, 68, 0.97) 100%);
+          background: linear-gradient(180deg, rgba(15, 28, 105, 0.60) 0%, rgba(8, 16, 68, 0.65) 100%);
           clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
           box-shadow:
             inset 0 0 0 1px rgba(133, 244, 255, 0.16),
@@ -377,7 +377,7 @@ export default function ResumePage({ src }) {
           gap: 14px;
           min-height: 56px;
           padding: 0 14px;
-          background: rgba(8, 18, 72, 0.96);
+          background: rgba(8, 18, 72, 0.65);
           clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
           box-shadow: inset 0 0 0 1px rgba(140, 239, 255, 0.12);
           transition: transform 0.16s ease, background 0.16s ease;
@@ -412,7 +412,7 @@ export default function ResumePage({ src }) {
           position: relative;
           margin-top: 22px;
           padding: 18px;
-          background: rgba(5, 13, 57, 0.97);
+          background: rgba(5, 13, 57, 0.65);
           clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
           box-shadow: inset 0 0 0 1px rgba(145, 239, 255, 0.12);
         }
