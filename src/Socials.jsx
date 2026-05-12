@@ -670,7 +670,6 @@ export default function Achievements() {
       )}
 
       {mounted && (
-        {/* Added focus condition to sc-info-panel */}
         <div className={`sc-info-panel ${focus === "left" ? "unfocused" : ""}`} key={`panel-${active}`}>
           {Array.from({ length: ITEMS[active].bars }).map((_, i) => (
             <div
