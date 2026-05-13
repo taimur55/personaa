@@ -17,17 +17,17 @@ const MAIN_IMAGES = [mainm, mainm2, mainf];
 const REVEAL_CONTENT = [
   {
     upper: ["Name: Taimur", "Age:21", "MEng Mechatronic Engineering Student"],
-    lower: ["University of Manchester", "Speciality: Robotics, Electronics and Embedded Systems"],
+    lower: ["University of Manchester"],
   },
   {
     upper: [
-      "I researched 'dark jets' in the Sun’s corona using real satellite data and presented the project at the UCL ORBYTS research conference.",
+      "I researched 'dark jets' in the Sun’s corona", "using real satellite data and presented the project", "at the UCL ORBYTS research conference.",
     ],
     lower: "Python • Solar Physics • Data Analysis",
   },
   {
     upper: [
-      "Outside engineering, I enjoy creative projects like 3D art in Blender, music/design experimentation, and anything that combines technical and artistic thinking.",
+      "Outside engineering, I enjoy creative projects like", "3D art in Blender, music/design experimentation, and", "anything that combines technical and artistic thinking.",
     ],
     lower: "Blender • Design • Creative Tech",
   },
