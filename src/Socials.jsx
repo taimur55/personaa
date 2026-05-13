@@ -23,16 +23,14 @@ const ITEMS = [
     id: "university", label: "UNIVERSITY", icon: "🎓", barIcon: icon1, bars: 4, newBars: [0], 
     dates: ["2023", "2023", "2022", "2022"],
     achievements: [
-      "Dean's List / First Class Honours", 
-      "Engineering Society Project Lead", 
-      "Robotics Competition Finalist", 
-      "Top Grade in Kinematics Module"
+      "Avg 2:1", 
+      "Electronics sub team leader", 
+      "MANCHESTAR Social Media Manager"
     ],
     descriptions: [
-      "Awarded for maintaining a top-tier GPA across all core Mechatronics modules.",
-      "Led a team of 15 students to build a fully autonomous line-following robot.",
-      "Placed in the top 10 out of 50+ university teams in the national robotics arena.",
-      "Achieved 98% in the final examination for complex kinematic equations."
+      "Averaged 2:1 across first and second year",
+      "Led the Electronics sub team at Hyperloop Manchester 2025-26",
+      "Social Media Manager for MANCHESTAR Fusion Society 2024-26",
     ],
     stats: [
       { tag: "YEAR", value: "3RD", color: "#9147ff" },
@@ -43,14 +41,16 @@ const ITEMS = [
     id: "secondary", label: "SECONDARY", icon: "🏫", barIcon: icon2, bars: 3, newBars: [], 
     dates: ["2021", "2021", "2019"],
     achievements: [
-      "A* A A in Advanced Levels", 
-      "Head Boy / Student Prefect", 
-      "Gold in National Math Challenge"
+      "A*AA in A Levels", 
+      "AAAA in AS Levels", 
+      "President of Astronomical Society",
+      "1st grade for Scholars' Programme"
     ],
     descriptions: [
-      "Achieved top grades in Mathematics, Physics, and Further Mathematics.",
-      "Elected by peers and teachers to represent the student body and lead assemblies.",
-      "Scored in the top 1% nationally in the UKMT Senior Mathematical Challenge."
+      "Achieved A*AA in Mathematics, Physics, and Further Mathematics respectively.",
+      "Achieved top grades in Maths, Physics, Further Maths and Economics",
+      "Started and organised a weekly astronomy-based society",
+      "Achieved a 1st grade for the Brilliant Club Scholars' Programme Essay"
     ],
     stats: [
       { tag: "ALVL", value: "03", color: "#e1306c" },
@@ -61,16 +61,16 @@ const ITEMS = [
     id: "misc", label: "MISC", icon: "🏆", barIcon: icon3, bars: 4, newBars: [0, 1], 
     dates: ["2024", "2023", "2021", "2019"],
     achievements: [
-      "AWS Cloud Practitioner Cert", 
-      "SolidWorks CSWA Certified", 
-      "Duke of Edinburgh Gold Award", 
-      "Grade 8 Piano Examination"
+      "Manual Drivers' License", 
+      "NCS Graduate 2021", 
+      "UCL ORBYTS Programme 2023", 
+      "Maths and Computer Science Challenges"
     ],
     descriptions: [
-      "Certified in foundational cloud concepts, security, and AWS infrastructure.",
-      "Passed the Certified SolidWorks Associate exam for 3D mechanical design.",
-      "Completed a 4-day wilderness expedition and 12 months of community volunteering.",
-      "Achieved distinction in the ABRSM Grade 8 practical piano assessment."
+      "Passed the Manual Driving Test in 2023 during my A levels",
+      "learned basic First Aid and organised a group charitable event, pitching the idea to investors to raise funds",
+      "Used Python in Google Colab to investigate unknown underresearched solar phenomena in the sun’s atmosphere.",
+      "Awarded Various UKMT Bronze and Silver Awards and a Distinction in the 2020 UK Bebras Challenge by the University of Oxford."
     ],
     stats: [
       { tag: "CERT", value: "02", color: "#00f2ea" },
