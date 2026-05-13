@@ -20,8 +20,8 @@ const ROLES = [
 // Added the "descriptions" arrays so the expanding box has text!
 const ITEMS = [
   {
-    id: "university", label: "UNIVERSITY", icon: "🎓", barIcon: icon1, bars: 4, newBars: [0], 
-    dates: ["2023", "2023", "2022", "2022"],
+    id: "university", label: "UNIVERSITY", icon: "🎓", barIcon: icon1, bars: 3, newBars: [0], 
+    dates: ["2026", "2026", "2026"],
     achievements: [
       "Avg 2:1", 
       "Electronics sub team leader", 
@@ -38,8 +38,8 @@ const ITEMS = [
     ],
   },
   {
-    id: "secondary", label: "SECONDARY", icon: "🏫", barIcon: icon2, bars: 3, newBars: [], 
-    dates: ["2021", "2021", "2019"],
+    id: "secondary", label: "SECONDARY", icon: "🏫", barIcon: icon2, bars: 4, newBars: [], 
+    dates: ["2023", "2022", "2023", "2022"],
     achievements: [
       "A*AA in A Levels", 
       "AAAA in AS Levels", 
@@ -59,11 +59,11 @@ const ITEMS = [
   },
   {
     id: "misc", label: "MISC", icon: "🏆", barIcon: icon3, bars: 4, newBars: [0, 1], 
-    dates: ["2024", "2023", "2021", "2019"],
+    dates: ["2023", "2021", "2023", "2021"],
     achievements: [
       "Manual Drivers' License", 
-      "NCS Graduate 2021", 
-      "UCL ORBYTS Programme 2023", 
+      "NCS Graduate", 
+      "UCL ORBYTS Programme", 
       "Maths and Computer Science Challenges"
     ],
     descriptions: [
